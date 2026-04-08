@@ -1,0 +1,42 @@
+# Routing rules for the tactical relay service.
+# Rules are evaluated in order; the first matching rule wins.
+# An empty match{} block matches all messages (wildcard/default).
+
+rules:
+  # Priority 1-2 TOP_SECRET messages from field terminals → multicast to both HQ nodes
+  - name: "urgent-high-command"
+    match:
+      priority_max: 2
+      classification: "TOP_SECRET"
+      originator_pattern: "FIELD-*"
+    action:
+      type: "multicast"
+      recipients:
+        - "HQ-PRIMARY"
+        - "HQ-BACKUP"
+
+  # All SECRET messages → store-and-forward via relay node
+  - name: "secret-via-relay"
+    match:
+      classification: "SECRET"
+    action:
+      type: "store_and_forward"
+      recipients:
+        - "RELAY-NODE-1"
+
+  # CONFIDENTIAL messages → direct relay
+  - name: "confidential-relay"
+    match:
+      classification: "CONFIDENTIAL"
+    action:
+      type: "direct"
+      recipients:
+        - "RELAY-NODE-1"
+
+  # Default: deliver to DEFAULT-QUEUE
+  - name: "default"
+    match: {}
+    action:
+      type: "direct"
+      recipients:
+        - "DEFAULT-QUEUE"

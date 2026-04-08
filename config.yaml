@@ -1,0 +1,59 @@
+# Tactical Message Relay Service — Configuration
+# All settings can be overridden via environment variables using the RELAY_ prefix.
+# Example: RELAY_TRANSPORT_PORT=9443 overrides transport.port
+# The RELAY_AUDIT_HMAC_SECRET environment variable MUST be set before starting.
+
+# TLS transport server
+transport:
+  # IP address to bind to (use 0.0.0.0 for all interfaces)
+  host: "0.0.0.0"
+  # TCP port for the mTLS server
+  port: 8443
+  # Path to PEM-encoded server certificate
+  certfile: "certs/server.crt"
+  # Path to PEM-encoded server private key
+  keyfile: "certs/server.key"
+  # Path to PEM-encoded CA certificate bundle for client verification
+  ca_bundle: "certs/ca.crt"
+  # Maximum allowed incoming messages per second per IP address
+  rate_limit_per_ip: 100
+  # Maximum simultaneous client connections
+  max_connections: 1000
+
+# Authentication and authorization
+auth:
+  # Path to the SQLite database containing authorized sender records
+  db_path: "data/auth.db"
+  # Path to the PEM-encoded Certificate Revocation List
+  crl_path: "certs/ca.crl"
+
+# Message queue persistence
+queues:
+  # Path to the SQLite database for message queues
+  db_path: "data/queues.db"
+  # Maximum messages per recipient queue before new messages are rejected
+  max_depth_per_queue: 10000
+  # Default message TTL in seconds (0 = no expiry by default)
+  default_ttl_seconds: 3600
+
+# Audit logging (HMAC secret must be set via RELAY_AUDIT_HMAC_SECRET env var)
+audit:
+  # Path to the structured JSONL audit log file
+  log_path: "logs/audit.jsonl"
+  # Maximum size of a single log file before rotation (bytes)
+  max_bytes: 104857600  # 100 MB
+  # Number of rotated backup files to retain
+  backup_count: 10
+
+# HTTP health endpoint (binds to localhost only)
+health:
+  host: "127.0.0.1"
+  port: 8080
+
+# Message routing
+routing:
+  # Path to the YAML routing rules file
+  rules_file: "config/routing_rules.yaml"
+
+# Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_level: "INFO"
