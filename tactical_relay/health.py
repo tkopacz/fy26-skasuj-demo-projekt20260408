@@ -34,19 +34,19 @@ def _cert_expiry_days(certfile: str) -> Optional[float]:
     Returns:
         Fractional days until expiry, or None if the file cannot be read.
     """
+    import datetime as _dt
+
     try:
         from cryptography import x509
         from pathlib import Path
-        from datetime import datetime
 
         data = Path(certfile).read_bytes()
         cert = x509.load_pem_x509_certificate(data)
         # not_valid_after_utc added in cryptography 42; fall back to not_valid_after
         not_after = getattr(cert, "not_valid_after_utc", None) or cert.not_valid_after
-        now = datetime.now(tz=timezone.utc)
+        now = _dt.datetime.now(tz=timezone.utc)
         # Ensure not_after is timezone-aware for subtraction
         if not_after.tzinfo is None:
-            import datetime as _dt
             not_after = not_after.replace(tzinfo=_dt.timezone.utc)
         delta = not_after - now
         return delta.total_seconds() / 86400.0

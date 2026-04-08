@@ -158,7 +158,8 @@ class TLSServer:
         ctx.load_verify_locations(cafile=self._ca_bundle)
         ctx.verify_mode = ssl.CERT_REQUIRED
         ctx.check_hostname = False
-        # Require TLS 1.3 minimum for production security
+        # Require TLS 1.2 minimum; upgrade to TLSv1_3 in environments
+        # where all clients support it.
         ctx.minimum_version = ssl.TLSVersion.TLSv1_2
         return ctx
 

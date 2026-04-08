@@ -153,8 +153,6 @@ def _apply_env_overrides(config: ServiceConfig) -> None:
                         raise ValueError(
                             f"Invalid value for {env_key}: {env_val!r} — {exc}"
                         ) from exc
-        elif len(parts) == 1 and parts[0] == "LOG" and rest == "LOG_LEVEL":
-            config.log_level = env_val
 
     # Special case: RELAY_LOG_LEVEL
     if "RELAY_LOG_LEVEL" in os.environ:
