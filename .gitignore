@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.tox/
+.venv/
+venv/
+env/
+
+# pytest
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+
+# Secrets and credentials — NEVER commit these
+certs/*.key
+certs/*.pem
+*.env
+secrets.env
+.env*
+!.env.example
+
+# Data files — generated at runtime
+data/
+logs/
+*.db
+*.db-wal
+*.db-shm
+
+# Editor and OS artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+
+# Distribution
+*.tar.gz
+*.whl
+
+# mypy
+.mypy_cache/

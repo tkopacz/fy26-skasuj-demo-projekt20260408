@@ -1,0 +1,24 @@
+syntax = "proto3";
+package tactical;
+
+// TacticalMessage carries a single classified message between terminals
+message TacticalMessage {
+  // Unique message identifier (UUID format recommended)
+  string message_id = 1;        // required, max 64 chars
+  string sender = 2;            // required, CN of originating terminal
+  repeated string recipients = 3; // required, at least one recipient
+  uint32 priority = 4;          // 1 (highest) to 9 (lowest)
+  string classification = 5;    // UNCLASSIFIED, CONFIDENTIAL, SECRET, TOP_SECRET
+  string content_type = 6;      // MIME type of payload
+  bytes payload = 7;            // encrypted message content
+  int64 timestamp = 8;          // Unix timestamp (seconds)
+  uint32 ttl_seconds = 9;       // time-to-live; 0 = no expiry
+}
+
+// DeliveryAck acknowledges delivery to a specific recipient
+message DeliveryAck {
+  string message_id = 1;
+  string recipient = 2;
+  string status = 3;            // DELIVERED, QUEUED, REJECTED, EXPIRED
+  int64 timestamp = 4;
+}
