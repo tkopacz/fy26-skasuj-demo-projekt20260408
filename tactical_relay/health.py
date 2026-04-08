@@ -11,7 +11,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-from datetime import timezone
 from typing import TYPE_CHECKING, Optional
 
 from aiohttp import web
@@ -44,7 +43,7 @@ def _cert_expiry_days(certfile: str) -> Optional[float]:
         cert = x509.load_pem_x509_certificate(data)
         # not_valid_after_utc added in cryptography 42; fall back to not_valid_after
         not_after = getattr(cert, "not_valid_after_utc", None) or cert.not_valid_after
-        now = _dt.datetime.now(tz=timezone.utc)
+        now = _dt.datetime.now(tz=_dt.timezone.utc)
         # Ensure not_after is timezone-aware for subtraction
         if not_after.tzinfo is None:
             not_after = not_after.replace(tzinfo=_dt.timezone.utc)

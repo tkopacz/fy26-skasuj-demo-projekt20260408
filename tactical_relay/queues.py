@@ -217,6 +217,10 @@ class QueueManager:
         """
         Mark all TTL-exceeded messages as delivered (to the DLQ).
 
+        Expired messages are moved to a synthetic DLQ recipient named
+        ``__expired__/<original_recipient>`` so they can be distinguished
+        from live DLQ entries while still being excluded from active queues.
+
         Returns:
             Number of messages expired.
         """
@@ -225,7 +229,7 @@ class QueueManager:
             cur = self._conn.execute(
                 """
                 UPDATE messages
-                SET delivered = 1, delivered_at = ?, recipient = '__dlq__' || '_expired_' || recipient
+                SET delivered = 1, delivered_at = ?, recipient = '__expired__/' || recipient
                 WHERE delivered = 0
                   AND expires_at IS NOT NULL
                   AND expires_at <= ?

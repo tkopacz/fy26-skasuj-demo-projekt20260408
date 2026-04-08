@@ -39,6 +39,7 @@ class TestMessageFraming:
             parse_frame(b"\x00\x01")
 
     def test_frame_large_payload(self):
+        # Test at the 64 KiB boundary to exercise the length-prefix with a non-trivial value
         payload = b"X" * 65536
         framed = frame_message(payload)
         length, recovered = parse_frame(framed)

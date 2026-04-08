@@ -10,6 +10,9 @@ set -euo pipefail
 OUTDIR="${1:-certs}"
 mkdir -p "$OUTDIR"
 
+# 3650-day validity covers multi-year lab and CI environments where cert
+# rotation is managed manually. Production deployments should use shorter
+# lifetimes (e.g., 365 days) enforced by the CA policy.
 DAYS=3650
 SUBJECT_CA="/CN=Tactical-Relay-Test-CA/O=TacticalRelay/C=US"
 SUBJECT_SERVER="/CN=relay-server/O=TacticalRelay/C=US"

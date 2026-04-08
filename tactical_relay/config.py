@@ -97,8 +97,8 @@ class ServiceConfig:
     Top-level service configuration.
 
     Load from a YAML file and override individual settings via environment
-    variables using the RELAY_ prefix with double-underscore separators.
-    Example: RELAY_TRANSPORT__PORT=9443
+    variables using the RELAY_ prefix with single-underscore separators.
+    Example: RELAY_TRANSPORT_PORT=9443
     """
 
     transport: TransportConfig = field(default_factory=TransportConfig)
